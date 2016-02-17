@@ -40,6 +40,6 @@ Web browser
 
 - Needs to save bookmarks, write scripts, etc
 
-- Would have to think about more ideas
+- Would have to think about more ideas / but a cool way to use unix networking commands
 
 
