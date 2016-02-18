@@ -18,7 +18,6 @@ FTP Gui written in C++
 - beautiful GUI of course
 
 - maybe other features? 
-- 
 
 
 OOP: Each button will be an object, the windows will be objects....each file will be an instance of an object.
@@ -29,7 +28,7 @@ OOP: Each button will be an object, the windows will be objects....each file wil
 
 
 
-#Other ideas
+Other ideas
 
 
 
