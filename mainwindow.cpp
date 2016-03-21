@@ -16,5 +16,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     QString url = ui->lineEdit->text();
-    ui->webView->load(url);
+    std::string stdUrl = url.toStdString();
+    std::size_t found = stdUrl.find("http://");
+    if (found == 0)
+        ui->webView->load(url);
+    else ui->webView->load("http://" + url);
 }
