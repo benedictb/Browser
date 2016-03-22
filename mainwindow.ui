@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="goButton">
     <property name="geometry">
      <rect>
       <x>570</x>
@@ -52,7 +52,7 @@
      </url>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="forwardButton">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -65,7 +65,7 @@
      <string>&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="backButton">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -85,7 +85,7 @@
      <x>0</x>
      <y>0</y>
      <width>802</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
