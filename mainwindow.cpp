@@ -26,8 +26,13 @@ void MainWindow::on_goButton_clicked()
     }
 
     ui->webView->load(url);
-    history.push_back(url.toStdString());
     historyPlace++;
+    history.resize(historyPlace+1);
+    history[historyPlace]=url.toStdString();
+
+//    history[historyPlace]=url.toStdString();
+//    history.resize(historyPlace+1);
+
 }
 
 void MainWindow::on_backButton_clicked()
