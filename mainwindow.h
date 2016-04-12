@@ -22,6 +22,8 @@ private slots:
     void on_goButton_clicked();
     void on_backButton_clicked();
     void on_forwardButton_clicked();
+    void on_refreshButton_clicked();
+    void addressBarHighlighter();
 
 private:
     Ui::MainWindow *ui;
