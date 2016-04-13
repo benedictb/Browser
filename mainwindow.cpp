@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+   // toolbar *bar = new toolbar();
+   // MainWindow::setCentralWidget(bar);
 }
 
 MainWindow::~MainWindow()
