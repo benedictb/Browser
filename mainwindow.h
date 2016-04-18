@@ -24,14 +24,16 @@ private slots:
     void on_forwardButton_clicked();
     void on_refreshButton_clicked();
     void addressBarHighlighter();
-
+    void newTab(QString);
     void on_tabWidget_currentChanged(int index);
+    //void on_newTab_clicked();
 
 private:
     Ui::MainWindow *ui;
     std::vector<std::string> history;
     int historyPlace;
     int currentTab;
+    QString homepage;
 };
 
 #endif // MAINWINDOW_H
