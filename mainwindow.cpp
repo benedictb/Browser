@@ -14,7 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * quitShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     QShortcut * refreshShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(on_refreshButton_clicked()));
     QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), ui->lineEdit, SLOT(setFocus()));
-    //QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab("new")));
+    QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
+    QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
+    QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
     ui->lineEdit->setText(homepage);
     ui->webView->load(ui->lineEdit->text());
@@ -88,4 +90,16 @@ void MainWindow::newTab(QString str) {
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     currentTab = index;
+}
+
+void MainWindow::nextTab(){
+    if (ui->tabWidget->currentIndex() >= ui->tabWidget->count()-1){
+        ui->tabWidget->setCurrentIndex(0);
+    } else {
+        ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() + 1));
+    }
+}
+
+void MainWindow::deleteTab(){
+    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
 }
