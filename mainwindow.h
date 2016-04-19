@@ -24,8 +24,10 @@ private slots:
     void on_forwardButton_clicked();
     void on_refreshButton_clicked();
     void addressBarHighlighter();
-    void newTab(QString);
+    void newTab(QString = QString("New Tab"));
     void on_tabWidget_currentChanged(int index);
+    void nextTab();
+    void deleteTab();
     //void on_newTab_clicked();
 
 private:
