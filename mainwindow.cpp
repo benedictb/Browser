@@ -75,7 +75,6 @@ void MainWindow::on_forwardButton_clicked()
 
 void MainWindow::on_refreshButton_clicked(){
     on_goButton_clicked();
-    newTab("New Tab");
 }
 
 void MainWindow::addressBarHighlighter(){
@@ -84,7 +83,7 @@ void MainWindow::addressBarHighlighter(){
 }
 
 void MainWindow::newTab(QString str) {
-    ui->tabWidget->addTab(new QWidget(), str);
+    ui->tabWidget->addTab(new QWebView(), str);
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
