@@ -5,6 +5,7 @@
 #include <QtWebKit/QtWebKit>
 #include <vector>
 #include <string>
+#include <set>
 
 namespace Ui {
 class MainWindow;
@@ -28,11 +29,12 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     void nextTab();
     void deleteTab();
-    //void on_newTab_clicked();
+    void autoComplete();
 
 private:
     Ui::MainWindow *ui;
     std::vector<std::string> history;
+    std::set<std::string> past;
     int historyPlace;
     int currentTab;
     QString homepage;

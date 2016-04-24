@@ -106,5 +106,5 @@ void MainWindow::deleteTab(){
 
 void MainWindow::autoComplete() {
     QString current = ui->lineEdit->text();
-
+    // iterate through data structure and set text 
 }
