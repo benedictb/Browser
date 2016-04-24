@@ -3,6 +3,8 @@
 #include <QShortcut>
 #include <iostream>
 
+//history and bookmarks
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -11,17 +13,23 @@ MainWindow::MainWindow(QWidget *parent) :
     homepage = "http://nd.edu";
     historyPlace=-1;
     currentTab = 0;
+
     QShortcut * quitShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     QShortcut * refreshShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(on_refreshButton_clicked()));
     QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), ui->lineEdit, SLOT(setFocus()));
     QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
     QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
     QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
+<<<<<<< HEAD
     QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete));
+=======
+>>>>>>> 9621ec4a69d21dbcf9c912d3486c9f8fa5eabc95
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
+
     ui->lineEdit->setText(homepage);
     ui->webView->load(ui->lineEdit->text());
+
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
 }
 
@@ -41,6 +49,7 @@ void MainWindow::on_goButton_clicked()
     }
 
     ui->webView->load(url);
+
     historyPlace++;
     history.resize(historyPlace+1);
     history[historyPlace]=url.toStdString();
