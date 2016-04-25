@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     if (!icognito) {
-        QFile file("/Users/bobsim21/Desktop/Project/visited.txt");
+        QFile file("../Project/visited.txt");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
         QTextStream stream(&file);
         for (it = visited.begin(); it != visited.end(); ++it)
