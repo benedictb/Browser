@@ -31,6 +31,7 @@ private slots:
     void nextTab();
     void deleteTab();
     void autoComplete();
+    void load_visited();
 
 private:
     Ui::MainWindow *ui;
@@ -40,6 +41,8 @@ private:
     int currentTab;
     QString homepage;
     std::vector<QWebView*> webViews;
+    std::set<std::string> visited;
+    std::set<std::string>::iterator it;
 };
 
 #endif // MAINWINDOW_H
