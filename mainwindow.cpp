@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
     QShortcut * backShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left),ui->backButton,SLOT(click()));
     QShortcut * forwardShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right),ui->forwardButton,SLOT(click()));
-    QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
+    QShortcut * toggle_icognito = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I),this,SLOT(toggle_incogito()));
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
     ui->lineEdit->setText(homepage);
@@ -158,7 +158,9 @@ void MainWindow::load_visited() {
 void MainWindow::toggle_icognito() {
     if (icognito) {
         icognito = false;
+       // ui->centralWidget->styleSheet("background-color: black;");
     } else {
         icognito = true;
+       // ui->centralWidget->styleSheet("background-color: white;");
     }
 }
