@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     currentTab = 0;
     QShortcut * quitShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     QShortcut * refreshShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(on_refreshButton_clicked()));
-    QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), ui->lineEdit, SLOT(setFocus()));
+    QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this,SLOT(addressBarHighlighter()));
     QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
     QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
     QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
@@ -126,6 +126,8 @@ void MainWindow::nextTab(){
     } else {
         ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() + 1));
     }
+
+    ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
 void MainWindow::deleteTab(){
@@ -142,7 +144,7 @@ void MainWindow::autoComplete() {
 }
 
 void MainWindow::load_visited() {
-    QFile file("/Users/bobsim21/Desktop/Project/visited.txt");
+    QFile file("../Project/visited.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No History Found");
