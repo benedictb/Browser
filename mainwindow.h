@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtWebKit/QtWebKit>
+#include <QWebView>
 #include <vector>
 #include <string>
 #include <set>
@@ -38,6 +39,7 @@ private:
     int historyPlace;
     int currentTab;
     QString homepage;
+    std::vector<QWebView*> webViews;
 };
 
 #endif // MAINWINDOW_H

@@ -20,10 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
     QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
     QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
-<<<<<<< HEAD
-    QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete));
-=======
->>>>>>> 9621ec4a69d21dbcf9c912d3486c9f8fa5eabc95
+    //QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete));
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
 
@@ -31,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->webView->load(ui->lineEdit->text());
 
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
+    webViews.push_back(ui->webView);
 }
 
 MainWindow::~MainWindow()
@@ -48,7 +46,8 @@ void MainWindow::on_goButton_clicked()
         url = "http://" + url;
     }
 
-    ui->webView->load(url);
+    //ui->webView->load(url);
+    webViews[ui->tabWidget->currentIndex()]->load(url);
 
     historyPlace++;
     history.resize(historyPlace+1);
@@ -93,7 +92,11 @@ void MainWindow::addressBarHighlighter(){
 }
 
 void MainWindow::newTab(QString str) {
-    ui->tabWidget->addTab(new QWebView(), str);
+    QWebView *newView = new QWebView(); // creates new tab
+    webViews.push_back(newView);
+    ui->tabWidget->addTab(newView, str);
+    ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
+    newView->load(homepage);
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
