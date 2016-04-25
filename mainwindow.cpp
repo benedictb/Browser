@@ -50,9 +50,8 @@ void MainWindow::on_goButton_clicked()
         url = "http://" + url;
     }
 
-    ui->webView->load(url);
+    webViews[ui->tabWidget->currentIndex()-1]->load(url);
     visited.insert(url.toStdString());
-    webViews[ui->tabWidget->currentIndex()]->load(url);
     historyPlace++;
     history.resize(historyPlace+1);
     history[historyPlace]=url.toStdString();
