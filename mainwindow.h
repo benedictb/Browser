@@ -7,6 +7,9 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <histstack.h>
+
+
 
 namespace Ui {
 class MainWindow;
@@ -35,15 +38,21 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<std::string> history;
+
     std::set<std::string> past;
-    int historyPlace;
     int currentTab;
     QString homepage;
+
     std::vector<QWebView*> webViews;
+    std::vector<HistStack> histories;
+
     std::set<std::string> visited;
     std::set<std::string>::iterator it;
     bool icognito;
+
+    //    std::vector<std::string> history;
+    //    int historyPlace;
+
 };
 
 #endif // MAINWINDOW_H

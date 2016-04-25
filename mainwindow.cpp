@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QShortcut>
 #include <iostream>
+#include "histstack.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     icognito = false;
     ui->setupUi(this);
     homepage = "http://nd.edu";
-    historyPlace=-1;
+
+
     currentTab = 0;
     QShortcut * quitShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     QShortcut * refreshShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(on_refreshButton_clicked()));
@@ -25,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->webView->load(ui->lineEdit->text());
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
     load_visited();
+    webViews.push_back(ui->webView);
+
+    HistStack newHist;
+    newHist.add(homepage.toStdString());
+    histories.push_back(newHist);
 }
 
 MainWindow::~MainWindow()
@@ -50,43 +57,43 @@ void MainWindow::on_goButton_clicked()
         url = "http://" + url;
     }
 
-    webViews[ui->tabWidget->currentIndex()-1]->load(url);
+    webViews[ui->tabWidget->currentIndex()]->load(url);
     visited.insert(url.toStdString());
-    historyPlace++;
-    history.resize(historyPlace+1);
-    history[historyPlace]=url.toStdString();
+
+    histories[ui->tabWidget->currentIndex()].add(url.toStdString());
+
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
 
-//    history[historyPlace]=url.toStdString();
-//    history.resize(historyPlace+1);
+
 
 }
 
 void MainWindow::on_backButton_clicked()
 {
-    if (historyPlace <= 0){
-        return;
+    int current = ui->tabWidget->currentIndex();
+    if (histories[current].canGoBack()){
+        QString url = QString::fromStdString(histories[current].backStep());
+        ui->lineEdit->setText(url);
+        webViews[current]->load(url);
+
     }
 
-    historyPlace--;
-    ui->lineEdit->setText(QString::fromStdString(history[historyPlace]));
-    ui->webView->load(QString::fromStdString(history[historyPlace]));
 
 }
 
 void MainWindow::on_forwardButton_clicked()
 {
-    if (historyPlace >= history.size()-1){
-        return;
+    int current = ui->tabWidget->currentIndex();
+    if (histories[current].canGoForward()){
+        QString url = QString::fromStdString(histories[current].forwardStep());
+        ui->lineEdit->setText(url);
+        webViews[current]->load(url);
     }
 
-    historyPlace++;
-    ui->lineEdit->setText(QString::fromStdString(history[historyPlace]));
-    ui->webView->load(QString::fromStdString(history[historyPlace]));
 }
 
 void MainWindow::on_refreshButton_clicked() {
-    on_goButton_clicked();
+    webViews[ui->tabWidget->currentIndex()]->load(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
 void MainWindow::addressBarHighlighter() {
@@ -96,7 +103,13 @@ void MainWindow::addressBarHighlighter() {
 
 void MainWindow::newTab(QString str) {
     QWebView *newView = new QWebView(); // creates new tab
+    HistStack newHist;
+    newHist.add(homepage.toStdString());
+
     webViews.push_back(newView);
+    histories.push_back(newHist);
+
+
     ui->tabWidget->addTab(newView, str);
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
     newView->load(homepage);
@@ -117,6 +130,8 @@ void MainWindow::nextTab(){
 
 void MainWindow::deleteTab(){
     ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+    webViews.erase(webViews.begin()+ui->tabWidget->currentIndex());
+    histories.erase(histories.begin()+ui->tabWidget->currentIndex());
 }
 
 void MainWindow::autoComplete() {
