@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
     QShortcut * backShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left),ui->backButton,SLOT(click()));
     QShortcut * forwardShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right),ui->forwardButton,SLOT(click()));
+    QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
     ui->lineEdit->setText(homepage);
@@ -65,8 +66,6 @@ void MainWindow::on_goButton_clicked()
     histories[ui->tabWidget->currentIndex()].add(url.toStdString());
 
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
-
-
 
 }
 
@@ -111,7 +110,6 @@ void MainWindow::newTab(QString str) {
     webViews.push_back(newView);
     histories.push_back(newHist);
 
-
     ui->tabWidget->addTab(newView, str);
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
     newView->load(homepage);
@@ -154,5 +152,13 @@ void MainWindow::load_visited() {
         while (!in.atEnd())
             visited.insert(in.readLine().toStdString());
         file.close();
+    }
+}
+
+void MainWindow::toggle_icognito() {
+    if (icognito) {
+        icognito = false;
+    } else {
+        icognito = true;
     }
 }

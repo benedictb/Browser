@@ -35,6 +35,7 @@ private slots:
     void deleteTab();
     void autoComplete();
     void load_visited();
+    void toggle_icognito();
 
 private:
     Ui::MainWindow *ui;
