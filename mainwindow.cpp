@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    icognito = true;
+    icognito = false;
     ui->setupUi(this);
     homepage = "http://nd.edu";
     historyPlace=-1;
@@ -18,12 +18,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
     QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
     QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
-    QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete));
+    QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
     ui->lineEdit->setText(homepage);
     ui->webView->load(ui->lineEdit->text());
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
+    load_visited();
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +51,8 @@ void MainWindow::on_goButton_clicked()
     }
 
     ui->webView->load(url);
+    visited.insert(url.toStdString());
+    webViews[ui->tabWidget->currentIndex()]->load(url);
     historyPlace++;
     history.resize(historyPlace+1);
     history[historyPlace]=url.toStdString();
@@ -93,7 +96,11 @@ void MainWindow::addressBarHighlighter() {
 }
 
 void MainWindow::newTab(QString str) {
-    ui->tabWidget->addTab(new QWebView(), str);
+    QWebView *newView = new QWebView(); // creates new tab
+    webViews.push_back(newView);
+    ui->tabWidget->addTab(newView, str);
+    ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
+    newView->load(homepage);
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -122,7 +129,7 @@ void MainWindow::autoComplete() {
 
 void MainWindow::load_visited() {
     QFile file("/Users/bobsim21/Desktop/Project/visited.txt");
-    file.open(QIODevice::ReadOnly);
+    file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No History Found");
     else {

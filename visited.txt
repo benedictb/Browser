@@ -1,2 +1,5 @@
-marchmathness.herokuapp.com
-ess.herokuapp.com
+espn.com
+google.com
+http://espn.com
+http://jamocracy.xy
+http://jamocracy.xyz
