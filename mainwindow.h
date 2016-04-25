@@ -43,6 +43,7 @@ private:
     std::vector<QWebView*> webViews;
     std::set<std::string> visited;
     std::set<std::string>::iterator it;
+    bool icognito;
 };
 
 #endif // MAINWINDOW_H
