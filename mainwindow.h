@@ -61,15 +61,12 @@ private:
     std::list<std::string> bookmarks;
     std::list<std::string>::iterator bkit;
 
-<<<<<<< HEAD
     QMenu * menu;
-=======
     int lastButtonPressed;
 
 //    QMenu * menu;
     //    std::vector<std::string> history;
     //    int historyPlace;
->>>>>>> 1ac6208dca03dd88111f65785097e8daa65eb285
 
 };
 
