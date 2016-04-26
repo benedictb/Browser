@@ -81,12 +81,13 @@ void MainWindow::on_goButton_clicked()
     if (QUrl(url).isValid()) {
         webViews[ui->tabWidget->currentIndex()]->load(url);
         visited.insert(url.toStdString());
-    } else webViews[ui->tabWidget->currentIndex()]->load("file://" + PATH + "index.html");
-
-    histories[ui->tabWidget->currentIndex()].add(url.toStdString());
-
-    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
-
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
+        histories[ui->tabWidget->currentIndex()].add(url.toStdString());
+    } else {
+        webViews[ui->tabWidget->currentIndex()]->load("file://" + PATH + "index.html");
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), QString("Page Not Found"));
+        ui->lineEdit->setText(url);
+    }
 }
 
 void MainWindow::on_backButton_clicked()
@@ -97,7 +98,6 @@ void MainWindow::on_backButton_clicked()
         QString url = QString::fromStdString(histories[current].backStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
-
     }
 }
 
@@ -110,7 +110,6 @@ void MainWindow::on_forwardButton_clicked()
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
     }
-
 }
 
 void MainWindow::on_refreshButton_clicked() {
@@ -156,7 +155,6 @@ void MainWindow::nextTab(){
     } else {
         ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() + 1));
     }
-
     ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
