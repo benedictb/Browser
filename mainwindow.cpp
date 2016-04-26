@@ -7,8 +7,8 @@
 #include <iostream>
 #include <string>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/";
-//const QString PATH = "../Project/";
+//const QString PATH = "/Users/bobsim21/Desktop/Project/";
+const QString PATH = "../Project/";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     histories.push_back(newHist);
 
     connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
-    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
+    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
 
 }
 
@@ -237,17 +237,26 @@ void MainWindow::link_set_text(bool OK){
     }
 }
 
-void MainWindow::link_loaded(bool OK){
-    if (OK){
-        if (lastButtonPressed == 0){
-            int current = ui->tabWidget->currentIndex();
-            QString url = webViews[ui->tabWidget->currentIndex()]->url().toString();
-            histories[current].add(url.toStdString());
-
-        } else {
-            lastButtonPressed = 0;
-        }
-
+void MainWindow::link_loaded(QUrl url){
+    if (lastButtonPressed == 0){
+        int current = ui->tabWidget->currentIndex();
+        histories[current].add(url.toString().toStdString());
+    } else {
+        lastButtonPressed = 0;
     }
+
+
+
+//    if (OK){
+//        if (lastButtonPressed == 0){
+//            int current = ui->tabWidget->currentIndex();
+//            QString url = webViews[ui->tabWidget->currentIndex()]->url().toString();
+//            histories[current].add(url.toStdString());
+
+//        } else {
+//            lastButtonPressed = 0;
+//        }
+
+//    }
 }
 
