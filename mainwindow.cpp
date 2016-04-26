@@ -184,7 +184,7 @@ void MainWindow::load_bookmarks(){
 void MainWindow::add_bookmark(){
     QString bkmk = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
 //    QString bkmk = ui->lineEdit->text();
-    QFile file("../Project/bookmarks.txt");
+    QFile file(QDir::current().path() + "bookmarks.txt");
     file.open(QIODevice::Append | QIODevice::Text);
     QTextStream stream(&file);
     stream<<bkmk << endl;
