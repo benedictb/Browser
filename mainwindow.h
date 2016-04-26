@@ -36,6 +36,8 @@ private slots:
     void autoComplete();
     void load_visited();
     void toggle_icognito();
+    void load_bookmarks();
+    void add_bookmark();
 
 private:
     Ui::MainWindow *ui;
@@ -51,6 +53,10 @@ private:
     std::set<std::string>::iterator it;
     bool icognito;
 
+    std::list<std::string> bookmarks;
+    std::list<std::string>::iterator bkit;
+
+    QMenu * menu;
     //    std::vector<std::string> history;
     //    int historyPlace;
 

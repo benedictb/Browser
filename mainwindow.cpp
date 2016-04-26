@@ -24,12 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * backShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left),ui->backButton,SLOT(click()));
     QShortcut * forwardShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Right),ui->forwardButton,SLOT(click()));
     QShortcut * toggle_icognito = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I),this,SLOT(toggle_icognito()));
+    QShortcut * addBookmarkShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D),this,SLOT(add_bookmark()));
 
     connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
     ui->lineEdit->setText(homepage);
     ui->webView->load(ui->lineEdit->text());
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
     load_visited();
+    load_bookmarks();
     webViews.push_back(ui->webView);
 
     HistStack newHist;
@@ -155,6 +157,31 @@ void MainWindow::load_visited() {
             visited.insert(in.readLine().toStdString());
         file.close();
     }
+}
+
+void MainWindow::load_bookmarks(){
+    QFile file("../Project/bookmarks.txt");
+    file.open(QIODevice::ReadWrite);
+    if (!file.exists())
+        ui->lineEdit->setText("No Bookmarks Found");
+    else {
+        QTextStream in(&file);
+        QString line = in.readLine();
+        while (!in.atEnd())
+            bookmarks.push_back(in.readLine().toStdString());
+        file.close();
+    }
+}
+
+void MainWindow::add_bookmark(){
+    QString bkmk = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
+//    QString bkmk = ui->lineEdit->text();
+    QFile file("../Project/bookmarks.txt");
+    file.open(QIODevice::Append | QIODevice::Text);
+    QTextStream stream(&file);
+    stream<<bkmk << endl;
+    file.close();
+
 }
 
 void MainWindow::toggle_icognito() {
