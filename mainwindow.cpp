@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     histories.push_back(newHist);
 
     connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
 
 }
 
@@ -69,6 +70,7 @@ void MainWindow::on_goButton_clicked()
         url = "http://" + url;
     }
 
+    lastButtonPressed = 1;
     webViews[ui->tabWidget->currentIndex()]->load(url);
     visited.insert(url.toStdString());
 
@@ -82,6 +84,7 @@ void MainWindow::on_backButton_clicked()
 {
     int current = ui->tabWidget->currentIndex();
     if (histories[current].canGoBack()){
+        lastButtonPressed=2;
         QString url = QString::fromStdString(histories[current].backStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
@@ -95,6 +98,7 @@ void MainWindow::on_forwardButton_clicked()
 {
     int current = ui->tabWidget->currentIndex();
     if (histories[current].canGoForward()){
+        lastButtonPressed=3;
         QString url = QString::fromStdString(histories[current].forwardStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
@@ -130,6 +134,7 @@ void MainWindow::newTab(QString str) {
     newView->load(homepage);
 
     connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
 
 }
 
@@ -228,4 +233,17 @@ void MainWindow::link_set_text(bool OK){
     }
 }
 
+void MainWindow::link_loaded(bool OK){
+    if (OK){
+        if (lastButtonPressed == 0){
+            int current = ui->tabWidget->currentIndex();
+            QString url = webViews[ui->tabWidget->currentIndex()]->url().toString();
+            histories[current].add(url.toStdString());
+
+        } else {
+            lastButtonPressed = 0;
+        }
+
+    }
+}
 

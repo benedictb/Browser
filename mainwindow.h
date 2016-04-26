@@ -40,6 +40,7 @@ private slots:
     void add_bookmark();
     void load_bookmark(QString);
     void link_set_text(bool);
+    void link_loaded(bool);
 
     void on_bookmarkButton_clicked();
 
@@ -60,7 +61,9 @@ private:
     std::list<std::string> bookmarks;
     std::list<std::string>::iterator bkit;
 
-    QMenu * menu;
+    int lastButtonPressed;
+
+//    QMenu * menu;
     //    std::vector<std::string> history;
     //    int historyPlace;
 
