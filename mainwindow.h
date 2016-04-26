@@ -39,6 +39,7 @@ private slots:
     void load_bookmarks();
     void add_bookmark();
     void load_bookmark(QString);
+    void link_set_text(bool);
 
     void on_bookmarkButton_clicked();
 

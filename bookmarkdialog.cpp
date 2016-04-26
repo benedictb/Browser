@@ -7,7 +7,7 @@
 #include <QTextStream>
 #include <QStringListModel>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/";
+const QString PATH = "../Project/";
 
 BookmarkDialog::BookmarkDialog(QWidget *parent) :
     QDialog(parent),
@@ -55,3 +55,4 @@ void BookmarkDialog::on_bookmarkButton_clicked(){
    emit loadBookmark(temp);
    emit close();
 }
+

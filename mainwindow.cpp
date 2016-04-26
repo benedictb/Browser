@@ -6,7 +6,7 @@
 #include "bookmarkdialog.h"
 #include <iostream>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/";
+const QString PATH = "../Project/";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     HistStack newHist;
     newHist.add(homepage.toStdString());
     histories.push_back(newHist);
+
+    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+
 }
 
 MainWindow::~MainWindow()
@@ -125,6 +128,9 @@ void MainWindow::newTab(QString str) {
     ui->tabWidget->addTab(newView, str);
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
     newView->load(homepage);
+
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -213,4 +219,13 @@ void MainWindow::load_bookmark(QString url){
 
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
 }
+
+void MainWindow::link_set_text(bool OK){
+    if (OK){
+        ui->lineEdit->setText(webViews[ui->tabWidget->currentIndex()]->url().toString());
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), webViews[ui->tabWidget->currentIndex()]->url().toString()); // sets name of tab to website
+
+    }
+}
+
 
