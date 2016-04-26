@@ -3,6 +3,8 @@
 #include <QShortcut>
 #include <iostream>
 #include "histstack.h"
+#include "bookmarkdialog.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -99,6 +101,12 @@ void MainWindow::on_refreshButton_clicked() {
     webViews[ui->tabWidget->currentIndex()]->load(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
+void MainWindow::on_bookmarkButton_clicked() {
+    BookmarkDialog * dialog = new BookmarkDialog();
+    dialog->show();
+    connect(dialog,SIGNAL(loadBookmark(QString)),this,SLOT(load_bookmark(QString)));
+}
+
 void MainWindow::addressBarHighlighter() {
     ui->lineEdit->selectAll();
     ui->lineEdit->setFocus();
@@ -193,3 +201,14 @@ void MainWindow::toggle_icognito() {
         this->setWindowTitle("Browser (Incognito)");
     }
 }
+
+void MainWindow::load_bookmark(QString url){
+    webViews[ui->tabWidget->currentIndex()]->load(url);
+
+    visited.insert(url.toStdString());
+    ui->lineEdit->setText(url);
+    histories[ui->tabWidget->currentIndex()].add(url.toStdString());
+
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
+}
+

@@ -14,9 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    histstack.cpp
+    histstack.cpp \
+    bookmarkdialog.cpp
 
 HEADERS  += mainwindow.h \
-    histstack.h
+    histstack.h \
+    bookmarkdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    bookmarkdialog.ui

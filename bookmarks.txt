@@ -4,3 +4,10 @@ http://twitter.com
 http://sakai.nd.edu
 http://uwa.edu.au
 http://radiohead.com
+http://youtube.com
+http://slack.com
+http://hottopic.com
+http://marvel.com
+http://wikipedia.com
+http://drive.google.com
+http://netapp.com

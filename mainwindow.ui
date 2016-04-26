@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
-    <height>497</height>
+    <width>1242</width>
+    <height>682</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
     <property name="verticalSpacing">
      <number>6</number>
     </property>
-    <item row="0" column="4">
+    <item row="0" column="5">
      <widget class="QPushButton" name="goButton">
       <property name="styleSheet">
        <string notr="true"/>
@@ -71,7 +71,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" rowspan="2" colspan="5">
+    <item row="1" column="0" rowspan="2" colspan="6">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -533,6 +533,13 @@
       </layout>
      </widget>
     </item>
+    <item row="0" column="4">
+     <widget class="QToolButton" name="bookmarkButton">
+      <property name="text">
+       <string>B</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -540,8 +547,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>802</width>
-     <height>22</height>
+     <width>1242</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>

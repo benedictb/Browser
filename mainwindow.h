@@ -38,6 +38,9 @@ private slots:
     void toggle_icognito();
     void load_bookmarks();
     void add_bookmark();
+    void load_bookmark(QString);
+
+    void on_bookmarkButton_clicked();
 
 private:
     Ui::MainWindow *ui;
