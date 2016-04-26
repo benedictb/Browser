@@ -7,7 +7,9 @@
 #include <QTextStream>
 #include <QStringListModel>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/";
+
+//const QString PATH = "../Project/";
+const QString PATH = "/Users/bobsim21/Desktop/Project";
 
 BookmarkDialog::BookmarkDialog(QWidget *parent) :
     QDialog(parent),
@@ -25,6 +27,8 @@ BookmarkDialog::BookmarkDialog(QWidget *parent) :
     model->setStringList(list);
 
     ui->bookmarkView->setModel(model);
+    ui->bookmarkView->setCurrentIndex(ui->bookmarkView->model()->index(0, 0));
+
 }
 
 BookmarkDialog::~BookmarkDialog()
@@ -50,8 +54,9 @@ void BookmarkDialog::make_bookmarks(){
 }
 
 void BookmarkDialog::on_bookmarkButton_clicked(){
-
    QString temp = (*(list.begin()+ui->bookmarkView->currentIndex().row()));
+
    emit loadBookmark(temp);
    emit close();
 }
+

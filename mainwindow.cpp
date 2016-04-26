@@ -8,6 +8,8 @@
 #include <string>
 
 const QString PATH = "/Users/bobsim21/Desktop/Project/";
+//const QString PATH = "../Project/";
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -41,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
     HistStack newHist;
     newHist.add(homepage.toStdString());
     histories.push_back(newHist);
+
+    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
+
 }
 
 MainWindow::~MainWindow()
@@ -70,6 +76,7 @@ void MainWindow::on_goButton_clicked()
     if (found != 0) {
         url = "http://" + url;
     }
+    lastButtonPressed = 1;
 
     if (QUrl(url).isValid()) {
         webViews[ui->tabWidget->currentIndex()]->load(url);
@@ -85,7 +92,8 @@ void MainWindow::on_goButton_clicked()
 void MainWindow::on_backButton_clicked()
 {
     int current = ui->tabWidget->currentIndex();
-    if (histories[current].canGoBack()) {
+    if (histories[current].canGoBack()){
+        lastButtonPressed=2;
         QString url = QString::fromStdString(histories[current].backStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
@@ -97,6 +105,7 @@ void MainWindow::on_forwardButton_clicked()
 {
     int current = ui->tabWidget->currentIndex();
     if (histories[current].canGoForward()){
+        lastButtonPressed=3;
         QString url = QString::fromStdString(histories[current].forwardStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
@@ -130,6 +139,10 @@ void MainWindow::newTab(QString str) {
     ui->tabWidget->addTab(newView, str);
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
     newView->load(homepage);
+
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
+
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -216,5 +229,27 @@ void MainWindow::load_bookmark(QString url){
     histories[ui->tabWidget->currentIndex()].add(url.toStdString());
 
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
+}
+
+void MainWindow::link_set_text(bool OK){
+    if (OK){
+        ui->lineEdit->setText(webViews[ui->tabWidget->currentIndex()]->url().toString());
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), webViews[ui->tabWidget->currentIndex()]->url().toString()); // sets name of tab to website
+
+    }
+}
+
+void MainWindow::link_loaded(bool OK){
+    if (OK){
+        if (lastButtonPressed == 0){
+            int current = ui->tabWidget->currentIndex();
+            QString url = webViews[ui->tabWidget->currentIndex()]->url().toString();
+            histories[current].add(url.toStdString());
+
+        } else {
+            lastButtonPressed = 0;
+        }
+
+    }
 }
 
