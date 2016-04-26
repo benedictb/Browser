@@ -1,5 +1,4 @@
-http://hottopic.com
-http://marvel.com
+http://nd.edu
 http://netapp.com
 http://radiohead.com
 http://reddit.com
@@ -9,6 +8,3 @@ http://texas.com
 http://twitter.com
 http://wikipedia.com
 http://youtube.com
-jamocracy.xyz
-utube.com
-jamocracy.xyz

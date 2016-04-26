@@ -5,9 +5,9 @@
 #include "histstack.h"
 #include "bookmarkdialog.h"
 #include <iostream>
+#include <string>
 
 const QString PATH = "/Users/bobsim21/Desktop/Project/";
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -49,8 +49,13 @@ MainWindow::~MainWindow()
         QFile file(PATH + "visited.txt");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
         QTextStream stream(&file);
-        for (it = visited.begin(); it != visited.end(); ++it)
-           stream << QString::fromStdString(*it) << endl; // writes new visited file before it exits
+        std::string temp;
+        for (it = visited.begin(); it != visited.end(); ++it) {
+           if ((*it).find("http://") != 0)
+               temp = "http://" + *it;
+           else temp = *it;
+           stream << QString::fromStdString(temp) << endl; // writes new visited file before it exits
+        }
         file.close();
     }
     delete ui;
@@ -66,8 +71,10 @@ void MainWindow::on_goButton_clicked()
         url = "http://" + url;
     }
 
-    webViews[ui->tabWidget->currentIndex()]->load(url);
-    visited.insert(url.toStdString());
+    if (QUrl(url).isValid()) {
+        webViews[ui->tabWidget->currentIndex()]->load(url);
+        visited.insert(url.toStdString());
+    } else webViews[ui->tabWidget->currentIndex()]->load("file://" + PATH + "index.html");
 
     histories[ui->tabWidget->currentIndex()].add(url.toStdString());
 
@@ -78,14 +85,12 @@ void MainWindow::on_goButton_clicked()
 void MainWindow::on_backButton_clicked()
 {
     int current = ui->tabWidget->currentIndex();
-    if (histories[current].canGoBack()){
+    if (histories[current].canGoBack()) {
         QString url = QString::fromStdString(histories[current].backStep());
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
 
     }
-
-
 }
 
 void MainWindow::on_forwardButton_clicked()
@@ -185,7 +190,6 @@ void MainWindow::load_bookmarks(){
 
 void MainWindow::add_bookmark(){
     QString bkmk = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
-//    QString bkmk = ui->lineEdit->text();
     QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::Append | QIODevice::Text);
     QTextStream stream(&file);

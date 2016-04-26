@@ -60,8 +60,6 @@ private:
     std::list<std::string>::iterator bkit;
 
     QMenu * menu;
-    //    std::vector<std::string> history;
-    //    int historyPlace;
 
 };
 
