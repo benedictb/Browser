@@ -6,6 +6,8 @@
 #include "bookmarkdialog.h"
 #include <iostream>
 
+const QString PATH = "/Users/bobsim21/Desktop/Project/";
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -44,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     if (!icognito) {
-        QFile file(QDir::current().path() + "visited.txt");
+        QFile file(PATH + "visited.txt");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
         QTextStream stream(&file);
         for (it = visited.begin(); it != visited.end(); ++it)
@@ -154,7 +156,7 @@ void MainWindow::autoComplete() {
 }
 
 void MainWindow::load_visited() {
-    QFile file(QDir::current().path() + "visited.txt");
+    QFile file(PATH + "visited.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No History Found");
@@ -168,7 +170,7 @@ void MainWindow::load_visited() {
 }
 
 void MainWindow::load_bookmarks(){
-    QFile file(QDir::current().path() + "bookmarks.txt");
+    QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No Bookmarks Found");
@@ -184,7 +186,7 @@ void MainWindow::load_bookmarks(){
 void MainWindow::add_bookmark(){
     QString bkmk = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
 //    QString bkmk = ui->lineEdit->text();
-    QFile file(QDir::current().path() + "bookmarks.txt");
+    QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::Append | QIODevice::Text);
     QTextStream stream(&file);
     stream<<bkmk << endl;

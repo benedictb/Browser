@@ -3,8 +3,11 @@
 #include "bookmarkitem.h"
 #include <QListView>
 #include <QFile>
+#include <QDir>
 #include <QTextStream>
 #include <QStringListModel>
+
+const QString PATH = "/Users/bobsim21/Desktop/Project/";
 
 BookmarkDialog::BookmarkDialog(QWidget *parent) :
     QDialog(parent),
@@ -30,7 +33,7 @@ BookmarkDialog::~BookmarkDialog()
 }
 
 void BookmarkDialog::load_bookmarks(){
-    QFile file(QDir::current().path() + "bookmarks.txt");
+    QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         emit close();
