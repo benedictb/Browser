@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     if (!icognito) {
-        QFile file("../Project/visited.txt");
+        QFile file(QDir::current().path() + "visited.txt");
         file.open(QIODevice::ReadWrite | QIODevice::Text);
         QTextStream stream(&file);
         for (it = visited.begin(); it != visited.end(); ++it)
@@ -154,7 +154,7 @@ void MainWindow::autoComplete() {
 }
 
 void MainWindow::load_visited() {
-    QFile file("../Project/visited.txt");
+    QFile file(QDir::current().path() + "visited.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No History Found");
@@ -168,7 +168,7 @@ void MainWindow::load_visited() {
 }
 
 void MainWindow::load_bookmarks(){
-    QFile file("../Project/bookmarks.txt");
+    QFile file(QDir::current().path() + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         ui->lineEdit->setText("No Bookmarks Found");
