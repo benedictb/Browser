@@ -30,7 +30,7 @@ BookmarkDialog::~BookmarkDialog()
 }
 
 void BookmarkDialog::load_bookmarks(){
-    QFile file("../Project/bookmarks.txt");
+    QFile file(QDir::current().path() + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
         emit close();
