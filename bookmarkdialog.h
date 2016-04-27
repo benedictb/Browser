@@ -21,7 +21,7 @@ public:
     ~BookmarkDialog();
 
     void load_bookmarks(void); //load the bookmarks
-    void make_bookmarks(void); //make the bookmark list abstract model
+//    void make_bookmarks(void); //make the bookmark list abstract model
 
 private slots:
     void on_bookmarkButton_clicked(); //on button click function

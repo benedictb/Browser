@@ -7,8 +7,8 @@
 #include <iostream>
 #include <string>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/"; // path to various text files
-//const QString PATH = "../Project/"; // this one should be appropriate on Linux machines
+//const QString PATH = "/Users/bobsim21/Desktop/Project/"; // path to various text files
+const QString PATH = "../Project/"; // this one should be appropriate on Linux machines
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -163,17 +163,17 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 void MainWindow::nextTab() {
     // moves current tab to the right
-    if (ui->tabWidget->currentIndex() >= ui->tabWidget->count()-1){
+    if (ui->tabWidget->currentIndex() >= ui->tabWidget->count()-1){ //moves the tab to the right one, or if the index is at the end, to the 1st tab
         ui->tabWidget->setCurrentIndex(0);
     } else {
         ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() + 1));
     }
-    ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
+    ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent())); //update address bar
 }
 
 void MainWindow::previousTab() {
     // moves tab selection to the left
-    if (ui->tabWidget->currentIndex() <= 0){
+    if (ui->tabWidget->currentIndex() <= 0){ //basically the opposite of the nextTab function
         ui->tabWidget->setCurrentIndex( ui->tabWidget->count()-1);
     } else {
         ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() - 1));
@@ -183,14 +183,14 @@ void MainWindow::previousTab() {
 
 void MainWindow::deleteTab() {
     // deletes the current tab
-    if (ui->tabWidget->count() <=1){
+    if (ui->tabWidget->count() <=1){ //close the window if its the last tab
         exit(0);
     }
 
-    webViews.erase(webViews.begin()+ui->tabWidget->currentIndex());
-    histories.erase(histories.begin()+ui->tabWidget->currentIndex());
-    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
-    QString url = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
+    webViews.erase(webViews.begin()+ui->tabWidget->currentIndex()); //erase the pointer
+    histories.erase(histories.begin()+ui->tabWidget->currentIndex()); //delete history
+    ui->tabWidget->removeTab(ui->tabWidget->currentIndex()); //kill tab
+    QString url = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()); //update text
     ui->lineEdit->setText(url);
 
 //    ui->tabWidget->setCurrentIndex(ui->tabWidget->currentIndex());
@@ -221,7 +221,7 @@ void MainWindow::load_visited() {
     }
 }
 
-void MainWindow::load_bookmarks() {
+void MainWindow::load_bookmarks() { // similar to the load visited function
     // loads bookmarks from text file
     QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
@@ -236,12 +236,12 @@ void MainWindow::load_bookmarks() {
     }
 }
 
-void MainWindow::add_bookmark(){
+void MainWindow::add_bookmark(){ //append the current address to the end of bookmarks.txt
     QString bkmk = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
     QFile file(PATH + "bookmarks.txt");
-    file.open(QIODevice::Append | QIODevice::Text);
+    file.open(QIODevice::Append | QIODevice::Text); //open with append
     QTextStream stream(&file);
-    stream<<bkmk << endl;
+    stream<<bkmk << endl; //write & close
     file.close();
 
 }
@@ -257,7 +257,7 @@ void MainWindow::toggle_icognito() {
 }
 
 void MainWindow::load_bookmark(QString url){
-    webViews[ui->tabWidget->currentIndex()]->load(url);
+    webViews[ui->tabWidget->currentIndex()]->load(url); //simply loads the url
 
     visited.insert(url.toStdString());
     ui->lineEdit->setText(url);
@@ -274,11 +274,11 @@ void MainWindow::link_set_text(QUrl url){
 }
 
 void MainWindow::link_loaded(QUrl url){
-    if (lastButtonPressed == 0){
+    if (lastButtonPressed == 0){ //only adds to the history if a link is clicked (==0), because the history is handled differently otherwise
         int current = ui->tabWidget->currentIndex();
         histories[current].add(url.toString().toStdString());
     } else {
-        lastButtonPressed = 0;
+        lastButtonPressed = 0; //reset lastButtonPressed
     }
 }
 

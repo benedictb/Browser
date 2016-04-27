@@ -8,8 +8,8 @@
 #include <QStringListModel>
 
 
-//const QString PATH = "../Project/";
-const QString PATH = "/Users/bobsim21/Desktop/Project";
+const QString PATH = "../Project/";
+//const QString PATH = "/Users/bobsim21/Desktop/Project";
 
 BookmarkDialog::BookmarkDialog(QWidget *parent) :
     QDialog(parent),
@@ -53,8 +53,8 @@ void BookmarkDialog::load_bookmarks(){ //load the file into a list, original imp
     }
 }
 
-void BookmarkDialog::make_bookmarks(){
-}
+//void BookmarkDialog::make_bookmarks(){
+//}
 
 void BookmarkDialog::on_bookmarkButton_clicked(){
    QString temp = (*(list.begin()+ui->bookmarkView->currentIndex().row())); //user's selection
