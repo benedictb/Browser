@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     newHist.add(homepage.toStdString());
     histories.push_back(newHist);
 
-    connect(ui->webView,SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
+    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl)));
     connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
 
 }
@@ -113,7 +113,10 @@ void MainWindow::on_forwardButton_clicked()
 }
 
 void MainWindow::on_refreshButton_clicked() {
-    webViews[ui->tabWidget->currentIndex()]->load(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
+    lastButtonPressed = 4;
+    int current = ui->tabWidget->currentIndex();
+    webViews[current]->load(QString::fromStdString(histories[current].getPresent()));
+//    webViews[ui->tabWidget->currentIndex()]->load(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
 void MainWindow::on_bookmarkButton_clicked() {
@@ -139,8 +142,8 @@ void MainWindow::newTab(QString str) {
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
     newView->load(homepage);
 
-    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_set_text(bool)));
-    connect(webViews[ui->tabWidget->count()-1],SIGNAL(loadFinished(bool)),this,SLOT(link_loaded(bool)));
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl)));
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
 
 }
 
@@ -229,12 +232,11 @@ void MainWindow::load_bookmark(QString url){
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
 }
 
-void MainWindow::link_set_text(bool OK){
-    if (OK){
-        ui->lineEdit->setText(webViews[ui->tabWidget->currentIndex()]->url().toString());
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), webViews[ui->tabWidget->currentIndex()]->url().toString()); // sets name of tab to website
+void MainWindow::link_set_text(QUrl url){
 
-    }
+    ui->lineEdit->setText(url.toString());
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url.toString()); // sets name of tab to website
+
 }
 
 void MainWindow::link_loaded(QUrl url){
@@ -244,19 +246,5 @@ void MainWindow::link_loaded(QUrl url){
     } else {
         lastButtonPressed = 0;
     }
-
-
-
-//    if (OK){
-//        if (lastButtonPressed == 0){
-//            int current = ui->tabWidget->currentIndex();
-//            QString url = webViews[ui->tabWidget->currentIndex()]->url().toString();
-//            histories[current].add(url.toStdString());
-
-//        } else {
-//            lastButtonPressed = 0;
-//        }
-
-//    }
 }
 

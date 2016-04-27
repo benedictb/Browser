@@ -23,50 +23,46 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void on_goButton_clicked();
+private slots: //slots are functions that can be connected to signals
+    void on_goButton_clicked(); //triggers when each button is clicked
     void on_backButton_clicked();
     void on_forwardButton_clicked();
     void on_refreshButton_clicked();
-    void addressBarHighlighter();
-    void newTab(QString = QString("New Tab"));
+    void addressBarHighlighter(); //highlights the addressbar
+    void newTab(QString = QString("New Tab")); //creates a new tab
     void on_tabWidget_currentChanged(int index);
-    void nextTab();
-    void deleteTab();
-    void autoComplete();
-    void load_visited();
-    void toggle_icognito();
-    void load_bookmarks();
-    void add_bookmark();
-    void load_bookmark(QString);
-    void link_set_text(bool);
-    void link_loaded(QUrl);
+    void nextTab(); //moves to the next tab
+    void deleteTab(); //deletes current tab
+    void autoComplete(); //autocompletes in the address bar
+    void load_visited(); //loads the previously visted websets into a set from the txt file
+    void toggle_icognito(); //turns incognito on and off
+    void load_bookmarks(); //loads the bookmarks into the bookmarks list from the txt file
+    void add_bookmark(); //adds the current tab's url to the list of bookmarks
+    void load_bookmark(QString); //loads a specific bookmark into the current tab
+    void link_set_text(QUrl); //sets the address bar to the current url
+    void link_loaded(QUrl); //adds a clicked link to the history
 
-    void on_bookmarkButton_clicked();
+    void on_bookmarkButton_clicked(); //launches bookmark dialog box
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui; //pointer to the ui object, from which all life flows
 
     std::set<std::string> past;
-    int currentTab;
-    QString homepage;
+    int currentTab; //holds the current tab index
+    QString homepage; //homepage that is loaded on each new tab initiazation
 
-    std::vector<QWebView*> webViews;
-    std::vector<HistStack> histories;
+    std::vector<QWebView*> webViews; //a vector of webviews, one for each tab
+    std::vector<HistStack> histories; //vector of histories, one for each tab
 
     std::set<std::string> visited;
-    std::set<std::string>::iterator it;
-    bool icognito;
+    std::set<std::string>::iterator it; //iterator for moving through the visted set
+    bool icognito; //whether igcognito mode is on or not
 
-    std::list<std::string> bookmarks;
-    std::list<std::string>::iterator bkit;
+    std::list<std::string> bookmarks; // list of all the bookmarks
+    std::list<std::string>::iterator bkit; //iterator for the bookmarks, depreciated (kinda)
 
-    QMenu * menu;
-    int lastButtonPressed;
+    int lastButtonPressed; //an integer representing which button was pressed before the load
 
-//    QMenu * menu;
-    //    std::vector<std::string> history;
-    //    int historyPlace;
 
 };
 
