@@ -7,8 +7,8 @@
 #include <iostream>
 #include <string>
 
-//const QString PATH = "/Users/bobsim21/Desktop/Project/";
-const QString PATH = "../Project/";
+const QString PATH = "/Users/bobsim21/Desktop/Project/";
+//const QString PATH = "../Project/";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -170,8 +170,10 @@ void MainWindow::deleteTab(){
 void MainWindow::autoComplete() {
     std::string current = ui->lineEdit->text().toStdString();
     for (it = visited.begin(); it != visited.end(); ++it)
-        if (it->find(current) != std::string::npos)
+        if (it->find(current) != std::string::npos) {
             ui->lineEdit->setText(QString::fromStdString(*it));
+            break;
+        }
 }
 
 void MainWindow::load_visited() {

@@ -8,8 +8,8 @@
 #include <QStringListModel>
 
 
-const QString PATH = "../Project/";
-//const QString PATH = "/Users/bobsim21/Desktop/Project";
+//const QString PATH = "../Project/";
+const QString PATH = "/Users/bobsim21/Desktop/Project";
 
 BookmarkDialog::BookmarkDialog(QWidget *parent) :
     QDialog(parent),
