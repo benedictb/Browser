@@ -97,6 +97,7 @@ void MainWindow::on_backButton_clicked()
     if (histories[current].canGoBack()){
         lastButtonPressed=2;
         QString url = QString::fromStdString(histories[current].backStep());
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url);
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
     }
@@ -108,6 +109,7 @@ void MainWindow::on_forwardButton_clicked()
     if (histories[current].canGoForward()){
         lastButtonPressed=3;
         QString url = QString::fromStdString(histories[current].forwardStep());
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url);
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
     }
@@ -172,9 +174,14 @@ void MainWindow::previousTab(){
 }
 
 void MainWindow::deleteTab(){
-    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+
     webViews.erase(webViews.begin()+ui->tabWidget->currentIndex());
     histories.erase(histories.begin()+ui->tabWidget->currentIndex());
+    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+    QString url = QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent());
+    ui->lineEdit->setText(url);
+
+//    ui->tabWidget->setCurrentIndex(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::autoComplete() {
