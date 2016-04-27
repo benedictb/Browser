@@ -35,6 +35,7 @@ BookmarkDialog::BookmarkDialog(QWidget *parent) :
 
 BookmarkDialog::~BookmarkDialog()
 {
+    delete ui->bookmarkView->model(); //clean up ui and the model that we made
     delete ui;
 }
 

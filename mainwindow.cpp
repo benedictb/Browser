@@ -34,20 +34,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * toggle_icognito = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I),this,SLOT(toggle_icognito()));
     QShortcut * addBookmarkShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D),this,SLOT(add_bookmark()));
 
-    connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked()));
+    connect(ui->lineEdit, SIGNAL(returnPressed()),ui->goButton,SIGNAL(clicked())); //connect enter key to go button
     ui->lineEdit->setText(homepage);
-    ui->webView->load(ui->lineEdit->text());
+    ui->webView->load(ui->lineEdit->text()); //load homepage
     ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), ui->lineEdit->text()); // sets name of tab to website
-    load_visited();
+    load_visited(); //load the two files, history and bookmarks
     load_bookmarks();
-    webViews.push_back(ui->webView);
 
-    HistStack newHist;
+
+    //This is kind of a test run for the first tab, the other tabs all go through a similar process in the new tab function
+    webViews.push_back(ui->webView); //put the webview in the tab vector
+
+    HistStack newHist; //create a new tab history for the first tab and put it into the tab history vector
     newHist.add(homepage.toStdString());
     histories.push_back(newHist);
 
-    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl)));
-    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
+    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl))); //add to the history every time a link is clicked
+    connect(ui->webView,SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl))); //set the text boxes correctly when a link is clicked
 
 }
 
@@ -67,14 +70,14 @@ MainWindow::~MainWindow()
         file.close();
     }
     for (int i = 0; i < ui->tabWidget->count(); i++){
-        delete webViews[i];
+        delete webViews[i]; //deletes all of the dynamically allocated webviews that we've made for the tabs
     }
     delete ui;
 }
 
 void MainWindow::on_goButton_clicked()
 {
-    QString url = ui->lineEdit->text();
+    QString url = ui->lineEdit->text(); //captures the string
     std::string stdUrl = url.toStdString();
     std::size_t found = stdUrl.find("http://");
 
@@ -97,11 +100,11 @@ void MainWindow::on_goButton_clicked()
 
 void MainWindow::on_backButton_clicked()
 {
-    int current = ui->tabWidget->currentIndex();
-    if (histories[current].canGoBack()){
+    int current = ui->tabWidget->currentIndex(); //int containing current index
+    if (histories[current].canGoBack()){ //if you can go back, it goes back
         lastButtonPressed=2;
         QString url = QString::fromStdString(histories[current].backStep());
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url);
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); //set text displays and load the previous url
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
     }
@@ -109,11 +112,11 @@ void MainWindow::on_backButton_clicked()
 
 void MainWindow::on_forwardButton_clicked()
 {
-    int current = ui->tabWidget->currentIndex();
-    if (histories[current].canGoForward()){
+    int current = ui->tabWidget->currentIndex(); //similar to the back button
+    if (histories[current].canGoForward()){ //if you can go forward...
         lastButtonPressed=3;
         QString url = QString::fromStdString(histories[current].forwardStep());
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url);
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); //set text displays and load the next url
         ui->lineEdit->setText(url);
         webViews[current]->load(url);
     }
@@ -122,14 +125,13 @@ void MainWindow::on_forwardButton_clicked()
 void MainWindow::on_refreshButton_clicked() {
     lastButtonPressed = 4;
     int current = ui->tabWidget->currentIndex();
-    webViews[current]->load(QString::fromStdString(histories[current].getPresent()));
-//    webViews[ui->tabWidget->currentIndex()]->load(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
+    webViews[current]->load(QString::fromStdString(histories[current].getPresent())); //load the current url again
 }
 
 void MainWindow::on_bookmarkButton_clicked() {
-    BookmarkDialog * dialog = new BookmarkDialog();
-    dialog->show();
-    connect(dialog,SIGNAL(loadBookmark(QString)),this,SLOT(load_bookmark(QString)));
+    BookmarkDialog * dialog = new BookmarkDialog(); //create a bookmark dialog on b button clicked
+    dialog->show(); //open the dialog box
+    connect(dialog,SIGNAL(loadBookmark(QString)),this,SLOT(load_bookmark(QString))); // connect the button press on the dialog box to the load_bookmark function in mainwindow
 }
 
 void MainWindow::addressBarHighlighter() {
@@ -149,7 +151,7 @@ void MainWindow::newTab(QString str) {
     ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage); // set name for tabs
     newView->load(homepage); // loads url for the tab
 
-    connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl)));
+    connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl))); //link up loading a new page to adding to the history and updating text fields
     connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
 
 }
