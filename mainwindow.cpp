@@ -7,19 +7,20 @@
 #include <iostream>
 #include <string>
 
-const QString PATH = "/Users/bobsim21/Desktop/Project/";
-//const QString PATH = "../Project/";
+const QString PATH = "/Users/bobsim21/Desktop/Project/"; // path to various text files
+//const QString PATH = "../Project/"; // this one should be appropriate on Linux machines
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    icognito = false;
-    ui->setupUi(this);
-    homepage = "http://nd.edu";
+    icognito = false; // default value for icognito mode
+    ui->setupUi(this); // simple setup for ui, shows the window
+    homepage = "http://nd.edu"; // default homepage
 
     this->setWindowTitle("Browser");
     currentTab = 0;
+    // Shortcuts set up here
     QShortcut * quitShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     QShortcut * refreshShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_R), this, SLOT(on_refreshButton_clicked()));
     QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this,SLOT(addressBarHighlighter()));
@@ -54,12 +55,12 @@ MainWindow::~MainWindow()
 {
     if (!icognito) {
         QFile file(PATH + "visited.txt");
-        file.open(QIODevice::ReadWrite | QIODevice::Text);
+        file.open(QIODevice::ReadWrite | QIODevice::Text); // opens visited.txt
         QTextStream stream(&file);
         std::string temp;
-        for (it = visited.begin(); it != visited.end(); ++it) {
+        for (it = visited.begin(); it != visited.end(); ++it) { // iterates through visited set
            if ((*it).find("http://") != 0)
-               temp = "http://" + *it;
+               temp = "http://" + *it; // adds http:// to all history to make it uniform
            else temp = *it;
            stream << QString::fromStdString(temp) << endl; // writes new visited file before it exits
         }
@@ -78,19 +79,19 @@ void MainWindow::on_goButton_clicked()
     std::size_t found = stdUrl.find("http://");
 
     if (found != 0) {
-        url = "http://" + url;
+        url = "http://" + url; // adds necessary http format for Url
     }
     lastButtonPressed = 1;
 
-    if (QUrl(url).isValid()) {
-        webViews[ui->tabWidget->currentIndex()]->load(url);
-        visited.insert(url.toStdString());
+    if (QUrl(url).isValid()) { // check if Url is valid http format
+        webViews[ui->tabWidget->currentIndex()]->load(url); // current tab loads html, etc.
+        visited.insert(url.toStdString()); // adds url to visited set
         ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), url); // sets name of tab to website
-        histories[ui->tabWidget->currentIndex()].add(url.toStdString());
-    } else {
-        webViews[ui->tabWidget->currentIndex()]->load("file://" + PATH + "index.html");
-        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), QString("Page Not Found"));
-        ui->lineEdit->setText(url);
+        histories[ui->tabWidget->currentIndex()].add(url.toStdString()); // adds to history
+    } else { // if the url is not vaid
+        webViews[ui->tabWidget->currentIndex()]->load("file://" + PATH + "index.html"); // displays custom html for page not found
+        ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), QString("Page Not Found")); // sets tab text
+        ui->lineEdit->setText(url); // sets address bar text
     }
 }
 
@@ -132,21 +133,21 @@ void MainWindow::on_bookmarkButton_clicked() {
 }
 
 void MainWindow::addressBarHighlighter() {
-    ui->lineEdit->selectAll();
+    ui->lineEdit->selectAll(); // Highlights the address bar, mapped to CTRL + L
     ui->lineEdit->setFocus();
 }
 
 void MainWindow::newTab(QString str) {
     QWebView *newView = new QWebView(); // creates new tab
-    HistStack newHist;
-    newHist.add(homepage.toStdString());
+    HistStack newHist; // creates new history for this tab
+    newHist.add(homepage.toStdString()); // adds first page to history
 
     webViews.push_back(newView);
     histories.push_back(newHist);
 
-    ui->tabWidget->addTab(newView, str);
-    ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage);
-    newView->load(homepage);
+    ui->tabWidget->addTab(newView, str); // implements the new tab
+    ui->tabWidget->setTabText(ui->tabWidget->count()-1,homepage); // set name for tabs
+    newView->load(homepage); // loads url for the tab
 
     connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_set_text(QUrl)));
     connect(webViews[ui->tabWidget->count()-1],SIGNAL(urlChanged(QUrl)),this,SLOT(link_loaded(QUrl)));
@@ -158,7 +159,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     currentTab = index;
 }
 
-void MainWindow::nextTab(){
+void MainWindow::nextTab() {
+    // moves current tab to the right
     if (ui->tabWidget->currentIndex() >= ui->tabWidget->count()-1){
         ui->tabWidget->setCurrentIndex(0);
     } else {
@@ -167,7 +169,8 @@ void MainWindow::nextTab(){
     ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
-void MainWindow::previousTab(){
+void MainWindow::previousTab() {
+    // moves tab selection to the left
     if (ui->tabWidget->currentIndex() <= 0){
         ui->tabWidget->setCurrentIndex( ui->tabWidget->count()-1);
     } else {
@@ -176,7 +179,8 @@ void MainWindow::previousTab(){
     ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
 
-void MainWindow::deleteTab(){
+void MainWindow::deleteTab() {
+    // deletes the current tab
     if (ui->tabWidget->count() <=1){
         exit(0);
     }
@@ -191,15 +195,17 @@ void MainWindow::deleteTab(){
 }
 
 void MainWindow::autoComplete() {
+    // auto completes the current address bar text
     std::string current = ui->lineEdit->text().toStdString();
-    for (it = visited.begin(); it != visited.end(); ++it)
-        if (it->find(current) != std::string::npos) {
-            ui->lineEdit->setText(QString::fromStdString(*it));
-            break;
+    for (it = visited.begin(); it != visited.end(); ++it) // searches in visited sites
+        if (it->find(current) != std::string::npos) { // if a similar string is found
+            ui->lineEdit->setText(QString::fromStdString(*it)); // exec autocomplete
+            break; // leave the loop and stop searching
         }
 }
 
 void MainWindow::load_visited() {
+    // loads text file with visited sites
     QFile file(PATH + "visited.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
@@ -207,13 +213,14 @@ void MainWindow::load_visited() {
     else {
         QTextStream in(&file);
         QString line = in.readLine();
-        while (!in.atEnd())
+        while (!in.atEnd()) // read the file and put into a visited set.
             visited.insert(in.readLine().toStdString());
         file.close();
     }
 }
 
-void MainWindow::load_bookmarks(){
+void MainWindow::load_bookmarks() {
+    // loads bookmarks from text file
     QFile file(PATH + "bookmarks.txt");
     file.open(QIODevice::ReadWrite);
     if (!file.exists())
@@ -221,9 +228,9 @@ void MainWindow::load_bookmarks(){
     else {
         QTextStream in(&file);
         QString line = in.readLine();
-        while (!in.atEnd())
-            bookmarks.push_back(in.readLine().toStdString());
-        file.close();
+        while (!in.atEnd()) // reads from the file
+            bookmarks.push_back(in.readLine().toStdString()); // adds the strings to bookmarks vector
+        file.close(); // closes the file
     }
 }
 
@@ -239,10 +246,10 @@ void MainWindow::add_bookmark(){
 
 void MainWindow::toggle_icognito() {
     if (icognito) {
-        icognito = false;
-        this->setWindowTitle("Browser");
+        icognito = false; // true then make false
+        this->setWindowTitle("Browser"); // changes title of window
     } else {
-        icognito = true;
+        icognito = true; // false then make true
         this->setWindowTitle("Browser (Incognito)");
     }
 }
