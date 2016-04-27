@@ -32,6 +32,7 @@ private slots: //slots are functions that can be connected to signals
     void newTab(QString = QString("New Tab")); //creates a new tab
     void on_tabWidget_currentChanged(int index);
     void nextTab(); //moves to the next tab
+    void previousTab(); // previous
     void deleteTab(); //deletes current tab
     void autoComplete(); //autocompletes in the address bar
     void load_visited(); //loads the previously visted websets into a set from the txt file

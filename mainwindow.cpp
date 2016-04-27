@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut * addressShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_L), this,SLOT(addressBarHighlighter()));
     QShortcut * newTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_T), this, SLOT(newTab()));
     QShortcut * switchTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab),this,SLOT(nextTab()));
+    QShortcut * switchBackTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab),this,SLOT(previousTab()));
     QShortcut * deleteCurrentTabShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W),this,SLOT(deleteTab()));
     QShortcut * autoComplete = new QShortcut(QKeySequence(Qt::Key_Tab),this,SLOT(autoComplete()));
     QShortcut * backShortcut = new QShortcut(QKeySequence(Qt::ALT + Qt::Key_Left),ui->backButton,SLOT(click()));
@@ -157,6 +158,15 @@ void MainWindow::nextTab(){
         ui->tabWidget->setCurrentIndex(0);
     } else {
         ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() + 1));
+    }
+    ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
+}
+
+void MainWindow::previousTab(){
+    if (ui->tabWidget->currentIndex() <= 0){
+        ui->tabWidget->setCurrentIndex( ui->tabWidget->count()-1);
+    } else {
+        ui->tabWidget->setCurrentIndex((ui->tabWidget->currentIndex() - 1));
     }
     ui->lineEdit->setText(QString::fromStdString(histories[ui->tabWidget->currentIndex()].getPresent()));
 }
