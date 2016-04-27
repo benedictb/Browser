@@ -65,6 +65,9 @@ MainWindow::~MainWindow()
         }
         file.close();
     }
+    for (int i = 0; i < ui->tabWidget->count(); i++){
+        delete webViews[i];
+    }
     delete ui;
 }
 
@@ -174,6 +177,9 @@ void MainWindow::previousTab(){
 }
 
 void MainWindow::deleteTab(){
+    if (ui->tabWidget->count() <=1){
+        exit(0);
+    }
 
     webViews.erase(webViews.begin()+ui->tabWidget->currentIndex());
     histories.erase(histories.begin()+ui->tabWidget->currentIndex());
