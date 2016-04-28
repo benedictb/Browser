@@ -1,6 +1,5 @@
 #include "bookmarkdialog.h"
 #include "ui_bookmarkdialog.h"
-#include "bookmarkitem.h"
 #include <QListView>
 #include <QFile>
 #include <QDir>
