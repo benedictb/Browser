@@ -7,7 +7,6 @@ HistStack::HistStack(){
 }
 
 HistStack::~HistStack(){
-
 }
 
 std::string HistStack::getPresent(void){
